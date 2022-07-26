@@ -1,0 +1,41 @@
+server {
+  # 固定值
+  listen 80;
+  # 固定值
+  server_name localhost;
+  # 固定值
+  root        /app/dist;
+
+  # 配置压缩参数
+  # compression
+  gzip on;
+  gzip_min_length   2k;
+  gzip_buffers      4 16k;
+  gzip_http_version 1.0;
+  gzip_comp_level   3;
+  gzip_types        text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;
+  gzip_vary on;
+
+  # 配置 Header
+  add_header X-Frame-Options "SAMEORIGIN" always;
+  add_header X-Xss-Protection "1; mode=block" always;
+  add_header X-Content-Type-Options "nosniff" always;
+  add_header Cache-Control no-cache;
+
+  # 配置路由规则
+  location / {
+    root      /app/dist;
+    index     index.html index.htm;
+    try_files $uri $uri/ /index.html;
+  }
+  
+  # static files
+  location ^~ /static/ {
+    expires 30d;
+  }
+
+  location = /health/check {
+    default_type    application/json;
+    return          200 '{"success":"OK"}';
+  }
+}

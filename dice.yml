@@ -1,0 +1,22 @@
+version: 2
+services:
+  mercado-backend:
+    ports:
+      - 7001
+    expose:
+      - 80
+    deployments:
+      replicas: 1
+    resources:
+      cpu: 0.2
+      mem: 512
+    health_check:
+      exec:
+        cmd: echo 1
+addons:
+  mercado-mysql:
+    plan: "mysql:basic"
+    as: "MYSQL"
+    options:
+      version: "5.7.29"
+envs: {}
